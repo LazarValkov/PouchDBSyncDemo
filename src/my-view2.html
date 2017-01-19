@@ -1,0 +1,146 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+
+<link rel="import" href="../bower_components/app-pouchdb/app-pouchdb-document.html">
+<link rel="import" href="../bower_components/app-pouchdb/app-pouchdb-conflict-resolution.html">
+<link rel="import" href="../bower_components/app-pouchdb/app-pouchdb-sync.html">
+
+<link rel="import" href="shared-styles.html">
+
+
+
+<dom-module id="my-view2">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+
+        padding: 10px;
+      }
+
+      paper-icon-button.favourite {
+        color: GoldenRod;
+        --paper-icon-button-ink-color: var(GoldenRod);
+      }
+    </style>
+
+    <app-pouchdb-conflict-resolution
+      strategy="lastWriteWins">
+    </app-pouchdb-conflict-resolution>
+    <app-pouchdb-document
+      db-name="{{username}}"
+      doc-id="favourites"
+      data="{{userFavourites}}">
+    </app-pouchdb-document>
+    <app-pouchdb-sync
+        src="https://jan:apple@52.178.198.66:5984/{{username}}"
+        target="{{username}}"
+        bidirectional>
+    </app-pouchdb-sync>
+
+    <div class="card">
+      <h1>Papers</h1>
+      <h2>Document1</h2>
+      <p>1Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec.</p>
+      <paper-icon-button icon="bookmark" noink on-tap="b1t" title="add to bookmark" class$="{{fav1}}"></paper-icon-button>
+      <hr>
+      <h2>Document2</h2>
+      <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis</p>
+      <paper-icon-button icon="bookmark" noink on-tap="b2t" title="add to bookmark" class$="{{fav2}}"></paper-icon-button>
+      <hr>
+      <h2>Document3</h2>
+      <p>Li Europan lingues es membres del sam familie. Lor separat existentie es un myth. Por scientie, musica, sport etc, litot Europa usa li sam vocabular. Li lingues differe solmen in li grammatica, li pronunciation e li plu commun vocabules.</p>
+      <paper-icon-button icon="bookmark" noink on-tap="b3t" title="add to bookmark" class$="{{fav3}}"></paper-icon-button>
+    </div>
+    Username: {{username}}
+  </template>
+
+  <script>
+    Polymer({
+      is: 'my-view2',
+      properties: {
+        username: {
+          type: String,
+          notify: true
+        },
+        userFavourites: {
+          type: Object,
+          notify: true
+        },
+        fav1: {
+          type: String,
+          value: ""
+        },
+        fav2: {
+          type: String,
+          value: ""
+        },
+        fav3: {
+          type: String,
+          value: ""
+        }
+      },
+      observers: [
+        'favChanged(userFavourites)'
+      ],
+
+      b1t: function() {
+        this.buttonPressed(1);
+      },
+
+      b2t: function() {
+        this.buttonPressed(2);
+      },
+
+      b3t: function() {
+        this.buttonPressed(3);
+      },
+
+      buttonPressed: function(itemId) {
+        console.log(this.userFavourites);
+        if(this.userFavourites['rr'+itemId]) {
+          this.set(['userFavourites','rr'+ itemId], false);
+        }
+        else {
+          this.set(['userFavourites','rr'+ itemId], true);
+        }
+      },
+
+      favChanged(e) {
+        if(this.userFavourites.rr1) {
+          this.fav1 = "favourite";
+        }
+        else {
+          this.fav1 = "";
+        }
+        if(this.userFavourites.rr2) {
+          this.fav2 = "favourite";
+        }
+        else {
+          this.fav2 = "";
+        }
+        if(this.userFavourites.rr3) {
+          this.fav3 = "favourite";
+        }
+        else {
+          this.fav3 = "";
+        }
+
+        console.log("favChanged called with the following e:");
+        console.log(e)
+      }
+
+    });
+  </script>
+</dom-module>

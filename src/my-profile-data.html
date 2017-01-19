@@ -1,0 +1,33 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-signals/iron-signals.html">
+
+<dom-module id="my-profile-data">
+  <script>
+    Polymer({
+      is: 'my-profile-data',
+
+      properties: {
+        profile: {
+          type: Object,
+          notify: true
+        },
+        loggedin: {
+          type: Boolean,
+          notify: true
+        }
+      }
+
+      // use path set api to propagate changes to localstorage
+      login: function(username) {
+        var newProfile = new Object();
+        newProfile.favourites = new Object();
+        this.profile = newProfile;
+        this.profile.username = username;
+
+        this.loggedin = true;
+      }
+    });
+
+  </script>
+
+</dom-module>

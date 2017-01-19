@@ -1,0 +1,46 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<dom-module id="my-authorization">
+  <script>
+    Polymer({
+      is: 'my-authorization',
+      properties: {
+        route: {
+          type: Object,
+          notify: true,
+          observer: '_routeChanged'
+        },
+        page: {
+          type: Object,
+          notyify: true,
+          observer: '_pageChanged'
+        },
+        username: {
+          type: String,
+          notify: true
+        }
+      },
+      _pageChanged: function(newPageValue) {
+        //console.log("my-authorization: page changed");
+        /*
+        console.log(newPageValue);
+        if(newPageValue=="view2") {
+          console.log("hmm");
+          console.log(this.route);
+          this.set('route.path', '/view1/');
+
+        }
+        */
+      },
+      _routeChanged: function(newRouteValue) {
+        unauthorizedPages = [ "view2" ];
+        console.log("my-authorization: route changed");
+        if(unauthorizedPages.includes(this.page)) {
+          if(typeof(myVariable) != "undefined" || this.username == null || this.username == "") {
+            this.set('route.path', '/view1/');
+          }
+        }
+      }
+    });
+  </script>
+</dom-module>
